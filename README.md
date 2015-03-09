@@ -81,7 +81,6 @@ dependency:
     * [Square's original Dagger project site on GitHub][square]
     * [Square Open Source Community][squarecommunity]
 
-
 Upon release, downloadable .jars will appear via search on Maven Central. You'll need
 [Dagger][dl-dagger], [dagger-compiler][dl-dagger-compiler] and [javax.inject][dl-inject].
 

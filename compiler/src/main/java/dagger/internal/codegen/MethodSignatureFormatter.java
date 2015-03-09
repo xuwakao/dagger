@@ -40,7 +40,7 @@ import static dagger.internal.codegen.ErrorMessages.stripCommonTypePrefixes;
  */
 final class MethodSignatureFormatter extends Formatter<ExecutableElement> {
   private final Types types;
-
+  
   MethodSignatureFormatter(Types types) {
     this.types = types;
   }
@@ -48,7 +48,7 @@ final class MethodSignatureFormatter extends Formatter<ExecutableElement> {
   @Override public String format(ExecutableElement method) {
     return format(method, Optional.<DeclaredType>absent());
   }
-
+  
   /**
    * Formats an ExecutableElement as if it were contained within the container, if the container is
    * present.
@@ -62,7 +62,7 @@ final class MethodSignatureFormatter extends Formatter<ExecutableElement> {
       type = MoreElements.asType(container.get().asElement());
     }
 
-    // TODO(user): AnnotationMirror formatter.
+    // TODO(cgruber): AnnotationMirror formatter.
     List<? extends AnnotationMirror> annotations = method.getAnnotationMirrors();
     if (!annotations.isEmpty()) {
       Iterator<? extends AnnotationMirror> annotationIterator = annotations.iterator();

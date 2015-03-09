@@ -45,11 +45,6 @@
       <groupId>com.google.auto</groupId>
       <artifactId>auto-common</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.google.auto.service</groupId>
-      <artifactId>auto-service</artifactId>
-      <optional>true</optional>
-    </dependency>
     <!-- TODO(gak): Restore this presumably as javapoet when appropriate.
     <dependency>
       <groupId>com.squareup</groupId>
@@ -62,10 +57,15 @@
     </dependency>
 
     <dependency>
+      <groupId>com.google.auto.service</groupId>
+      <artifactId>auto-service</artifactId>
+      <scope>provided</scope> <!-- to leave out of the all-deps jar -->
+    </dependency>
+    <dependency>
       <groupId>com.google.auto.value</groupId>
       <artifactId>auto-value</artifactId>
-      <optional>true</optional>
       <version>1.0</version>
+      <scope>provided</scope> <!-- to leave out of the all-deps jar -->
     </dependency>
 
     <dependency>
@@ -106,29 +106,31 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <configuration>
+          <addTestClassPath>true</addTestClassPath>
+          <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+          <pomIncludes>
+            <pomInclude>*/pom.xml</pomInclude>
+          </pomIncludes>
+          <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+          <postBuildHookScript>verify</postBuildHookScript>
+          <filterProperties>
+            <dagger.version>${project.version}</dagger.version>
+            <dagger.groupId>${project.groupId}</dagger.groupId>
+          </filterProperties>
+        </configuration>
         <executions>
           <execution>
-            <id>default-compile</id>
-            <goals><goal>compile</goal></goals>
-            <configuration>
-              <annotationProcessors>
-                <annotationProcessor>com.google.auto.value.processor.AutoValueProcessor</annotationProcessor>
-                <annotationProcessor>com.google.auto.service.processor.AutoServiceProcessor</annotationProcessor>
-              </annotationProcessors>
-            </configuration>
-          </execution>
-          <execution>
-            <id>default-test-compile</id>
-            <goals><goal>testCompile</goal></goals>
-            <configuration>
-              <annotationProcessors>
-                <annotationProcessor>dagger.internal.codegen.ComponentProcessor</annotationProcessor>
-              </annotationProcessors>
-            </configuration>
+            <id>integration-test</id>
+            <goals>
+              <goal>install</goal>
+              <goal>run</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
