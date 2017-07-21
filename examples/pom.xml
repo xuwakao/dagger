@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright (C) 2013 Google, Inc.
- Copyright (C) 2013 Square, Inc.
+  Copyright (C) 2013 The Dagger Authors.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -21,7 +20,7 @@
   <parent>
     <groupId>com.google.dagger</groupId>
     <artifactId>dagger-parent</artifactId>
-    <version>2.1-SNAPSHOT</version>
+    <version>HEAD-SNAPSHOT</version>
   </parent>
 
   <groupId>com.google.dagger.example</groupId>
@@ -48,6 +47,16 @@
         <artifactId>support-v4</artifactId>
         <version>r7</version>
       </dependency>
+      <dependency>
+        <groupId>com.google.dagger</groupId>
+        <artifactId>dagger</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.dagger</groupId>
+        <artifactId>dagger-compiler</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -67,7 +76,7 @@
           <version>4.3.0</version>
           <configuration>
             <sdk>
-              <platform>23</platform>
+              <platform>${android.latest.version}</platform>
               <path>${env.ANDROID_HOME}</path>
             </sdk>
           </configuration>

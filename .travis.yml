@@ -1,42 +1,57 @@
 language: android
 
+os: linux
+dist: precise
+sudo: required
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - oracle-java8-installer
+      - libstdc++-4.9-dev # https://github.com/nodegit/nodegit/issues/853
+      - gcc-4.8
+      - g++-4.8
+
 jdk:
-  - oraclejdk7
-  - openjdk7
+  - &jdk_for_publishing oraclejdk8
 
 android:
   components:
-    - build-tools-23.0.0
-    - android-23
-  licenses:
-    - android-sdk-license-5be876d5
+    - tools
+    - tools # Duplicated as per https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943
+    - build-tools-25.0.2
+    - android-25
+    - platform-tools
+    - extra-android-m2repository
 
 before_install:
+  - wget https://github.com/bazelbuild/bazel/releases/download/"${BAZEL_VERSION}"/bazel_"${BAZEL_VERSION}"-linux-x86_64.deb
+  - sudo dpkg -i bazel_"${BAZEL_VERSION}"-linux-x86_64.deb
   - sudo rm -f /etc/mavenrc
   - wget http://www.us.apache.org/dist/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.tar.gz
-  - tar -zxvf apache-maven-3.1.1-bin.tar.gz
-  - export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=192m"
-  - export M2_HOME=$PWD/apache-maven-3.1.1
-  - export PATH=$M2_HOME/bin:$PATH
-  - mvn --version
+  - tar -zxf apache-maven-3.1.1-bin.tar.gz
+  - export PATH="$PWD/apache-maven-3.1.1/bin:$PATH"
+  - mkdir travis_bin
+  - ln -s $(which gcc-4.8) travis_bin/gcc
+  - ln -s $(which g++-4.8) travis_bin/g++
+  - export PATH="${PWD}/travis_bin:${PATH}"
 
-install: mvn -P!standard-with-extra-repos -U install clean --fail-never --quiet -DskipTests=true -Dinvoker.skip=true
-
-script: mvn -P!standard-with-extra-repos -U verify --fail-at-end -Dsource.skip=true -Dmaven.javadoc.skip=true
-
-notifications:
-  email: dagger-firehose@googlegroups.com
+script: bazel test --test_output errors //...
 
 env:
   global:
     - secure: eGc3LHBRIPmTnXLM1YoIqG1do9BkpFI2pJm3fz5Cd8UaXtf7Oefa+Ts3rcn4ipee5A+lf8kEouPshSoaQs81KZ2/qf8rSTCIqeFjHR8hzmOVYo/0zRfS/VSUT0yqN+jeRhuNk3+A49RTPlcfJqPv3tyddtrM1vF7axhCJPQIRJM=
     - secure: LTzrlqcSNeZTOV52D3ibY9RBdxY4Yu8dUOYhAonrWLE+eDTzuoyCzcPw8pEcYVNUi1rG6Q7v3QBDTnBztsPoCbcN5tEGjw5cQEbfEzSTkWaNCFjncWn36cLwx9lgbF+5Db/L0mYJ36unDKUpKVC8AgOtxQibfv/ffugfxxj8ohY=
     - secure: PEdRiHTy+xVFPnlBwOhr7RVW/QIFSgd4hO0LESRBeF7KGIjxTZWtKPjnYrysZFm6tozMk6WBVJO6avOss0v7L64nemwpCnSspNYBa6pRGPgQ3rv/wgdPSzqDDmABmpPC18EHbUtF94KVdRX3Cr4kmwKQyD+YUKNRCY11Txt+xfo=
+    - JDK_FOR_PUBLISHING: *jdk_for_publishing
+    - BAZEL_VERSION="0.5.1"
 
 after_success:
   - util/generate-latest-docs.sh
   - util/publish-snapshot-on-commit.sh
 
 branches:
-  except:
-    - gh-pages
+  only:
+    - master
+    - /^release.*$/

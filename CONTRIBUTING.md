@@ -1,37 +1,25 @@
-Contributing
-============
+# How to contribute
 
-If you would like to contribute code to Dagger you can do so through GitHub by
-forking the repository and sending a pull request.
+We'd love to accept your patches and contributions to this project. There are
+just a few small guidelines you need to follow.
 
-When submitting code, please make every effort to follow existing conventions
-and style in order to keep the code as readable as possible.  
+## Contributor License Agreement
 
-Where appropriate, please provide unit tests or integration tests. Unit tests
-should be JUnit based tests and can use either standard JUnit assertions or
-FEST assertions and be added to `<project>/src/test/java`.  Changes to build-time
-behaviour (such as changes to code generation or graph validation) should go into
-small maven projects using the `maven-invoker-plugin`.  Examples of this are in
-`core/src/it` and can include bean-shell verification scripts and other
-facilities provided by `maven-invoker-plugin`.
+Contributions to any Google project must be accompanied by a Contributor License
+Agreement. This is necessary because you own the copyright to your changes, even
+after your contribution becomes part of this project. So this agreement simply
+gives us permission to use and redistribute your contributions as part of the
+project. Head over to <https://cla.developers.google.com/> to see your current
+agreements on file or to sign a new one.
 
-Please make sure your code compiles by running `mvn clean verify` which will
-execute both unit and integration test phases.  Additionally, consider using 
-http://travis-ci.org to validate your branches before you even put them into
-pull requests.  All pull requests will be validated by Travis-ci in any case
-and must pass before being merged.
+You generally only need to submit a CLA once, so if you've already submitted one
+(even if it was for a different project), you probably don't need to do it
+again.
 
-If you are adding or modifying files you may add your own copyright line, but
-please ensure that the form is consistent with the existing files, and please
-note that a Square, Inc. copyright line must appear in every copyright notice.
-All files are released with the Apache 2.0 license.
+## Code reviews
 
-Checkstyle failures during compilation indicate errors in your style and will
-be displayed in the console output of the build (including in Travis-CI output),
-or can be viewed in the `checkstyle-result.xml` file.
+All submissions, including submissions by project members, require review. We
+use GitHub pull requests for this purpose. Consult [GitHub Help] for more
+information on using pull requests.
 
-Before your code can be accepted into the project you must sign the
-[Individual Contributor License Agreement (CLA)][1].
-
-
- [1]: https://spreadsheets.google.com/spreadsheet/viewform?formkey=dDViT2xzUHAwRkI3X3k5Z0lQM091OGc6MQ&ndplr=1
+[GitHub Help]: https://help.github.com/articles/about-pull-requests/
